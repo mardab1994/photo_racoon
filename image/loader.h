@@ -1,3 +1,5 @@
 #pragma once
 
-int image_loader(const char *filename);
+#include "image.h"
+
+int image_loader(const char *filename, image_t * const image);
