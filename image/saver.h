@@ -1,3 +1,5 @@
 #pragma once
 
-int image_save(void);
+#include "image.h"
+
+int image_saver(image_t *const image);
