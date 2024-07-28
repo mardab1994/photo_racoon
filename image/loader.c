@@ -45,7 +45,7 @@ check_image_format(FILE *fptr, image_t *const image)
 }
 
 static int
-check_image_size(FILE *fptr, image_t *const image)
+check_image_info(FILE *fptr, image_t *const image)
 {
     if ((fptr == NULL) || (image == NULL)) {
         return -1;
@@ -112,7 +112,7 @@ image_loader(const char *filename, image_t *const image)
         return result;
     }
 
-    result = check_image_size(fptr, image);
+    result = check_image_info(fptr, image);
     if (result) {
         return result;
     }

@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-int
-saver_image_format(const image_t *image, FILE *fptr)
+static int
+save_image_format(const image_t *image, FILE *fptr)
 {
     if ((image == NULL) || (fptr == NULL)) {
         return -1;
@@ -16,8 +16,8 @@ saver_image_format(const image_t *image, FILE *fptr)
     return 0;
 }
 
-int
-saver_image_info(const image_t *image, FILE *fptr)
+static int
+save_image_info(const image_t *image, FILE *fptr)
 {
     if ((image == NULL) || (fptr == NULL)) {
         return -1;
@@ -29,8 +29,8 @@ saver_image_info(const image_t *image, FILE *fptr)
     return 0;
 }
 
-int
-saver_image_pixels(const image_t *image, FILE *fptr)
+static int
+save_image_pixels(const image_t *image, FILE *fptr)
 {
     if ((image == NULL) || (fptr == NULL) || (image->pixels == NULL)) {
         return -1;
@@ -71,9 +71,9 @@ image_saver(image_t *const image)
         return -2;
     }
 
-    saver_image_format(image, fptr);
-    saver_image_info(image, fptr);
-    saver_image_pixels(image, fptr);
+    save_image_format(image, fptr);
+    save_image_info(image, fptr);
+    save_image_pixels(image, fptr);
 
     fclose(fptr);
 
