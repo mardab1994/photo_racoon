@@ -2,6 +2,7 @@
 
 #include "image/image.h"
 #include "image/loader.h"
+#include "image/saver.h"
 
 int
 main(int argc, const char *argv[])
@@ -10,6 +11,9 @@ main(int argc, const char *argv[])
         image_t image;
         int     result = image_loader(argv[1], &image);
         printf("result %d \r\n", result);
+        image_show(&image);
+        image_saver(&image);
+        image_free(&image);
         return result;
     }
 

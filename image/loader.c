@@ -3,13 +3,14 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define LOADER_IMAGE_LINE_SIZE (1024)
 
 static char line[LOADER_IMAGE_LINE_SIZE];
 
 static int
-check_image_format(FILE *fptr, const image_t *image)
+check_image_format(FILE *fptr, image_t *const image)
 {
     if ((fptr == NULL) || (image == NULL)) {
         return -1;
@@ -19,9 +20,9 @@ check_image_format(FILE *fptr, const image_t *image)
         return -2;
     }
 
-    if ((line[0] == 'P') || (line[1] == '2')) {
-        printf("PGM format\r\n");
-    }
+    image->format = format_check(line);
+
+    printf("Format: %s\r\n", image->format.magic_number);
 
     char c;
 
@@ -44,7 +45,7 @@ check_image_format(FILE *fptr, const image_t *image)
 }
 
 static int
-check_image_size(FILE *fptr, image_t *const image)
+check_image_info(FILE *fptr, image_t *const image)
 {
     if ((fptr == NULL) || (image == NULL)) {
         return -1;
@@ -61,21 +62,24 @@ check_image_size(FILE *fptr, image_t *const image)
 }
 
 static int
-read_image(FILE *fptr, const image_t *const image)
+read_image_pixels(FILE *fptr, image_t *const image)
 {
     if ((fptr == NULL) || (image == NULL)) {
         return -1;
+    }
+
+    if (image_allocate(image)) {
+        return -2;
     }
 
     for (int i = 0; i < image->height; i++) {
         for (int j = 0; j < image->width; j++) {
             int val;
             if (fscanf(fptr, "%d", &val) != 1) {
-                return -2;
+                return -3;
             }
-            printf("%d ", val);
+            image->pixels[i * image->width + j] = (uint8_t)val;
         }
-        printf("\r\n");
     }
 
     return 0;
@@ -94,17 +98,23 @@ image_loader(const char *filename, image_t *const image)
         return -2;
     }
 
-    int result = check_image_format(fptr, image);
+
+    int result = image_set_filename(image, filename);
     if (result) {
         return result;
     }
 
-    result = check_image_size(fptr, image);
+    result = check_image_format(fptr, image);
     if (result) {
         return result;
     }
 
-    result = read_image(fptr, image);
+    result = check_image_info(fptr, image);
+    if (result) {
+        return result;
+    }
+
+    result = read_image_pixels(fptr, image);
 
     fclose(fptr);
 
