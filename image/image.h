@@ -18,3 +18,4 @@ typedef struct {
 int image_allocate(image_t * const image);
 int image_free(image_t * const image);
 int image_show(image_t * const image);
+int image_set_filename(image_t *const image, const char *filename);

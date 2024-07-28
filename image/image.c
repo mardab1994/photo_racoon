@@ -65,3 +65,25 @@ image_show(image_t *const image)
 
     return 0;
 }
+
+int
+image_set_filename(image_t *const image, const char *filename)
+{
+    if ((image == NULL) || (filename == NULL)) {
+        return -1;
+    }
+
+    if (image->filename == NULL) {
+        return -2;
+    }
+
+    size_t filename_len = strlen(filename) + 1;
+    image->filename     = malloc(filename_len);
+    if (image->filename == NULL) {
+        return -3;
+    }
+
+    snprintf(image->filename, filename_len, "%s", filename);
+
+    return 0;
+}

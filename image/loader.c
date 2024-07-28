@@ -98,16 +98,13 @@ image_loader(const char *filename, image_t *const image)
         return -2;
     }
 
-    size_t filename_len = strlen(filename) + 1;
 
-    image->filename = malloc(filename_len);
-    if (image->filename == NULL) {
-        return -3;
+    int result = image_set_filename(image, filename);
+    if (result) {
+        return result;
     }
 
-    snprintf(image->filename, filename_len, "%s", filename);
-
-    int result = check_image_format(fptr, image);
+    result = check_image_format(fptr, image);
     if (result) {
         return result;
     }
