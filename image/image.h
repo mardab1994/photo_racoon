@@ -12,4 +12,9 @@ typedef struct {
     uint32_t        height;
     int             grayscale;
     format_params_t format;
+    uint8_t        *pixels;
 } image_t;
+
+int image_allocate(image_t * const image);
+int image_free(image_t * const image);
+int image_show(image_t * const image);

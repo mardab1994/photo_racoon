@@ -3,6 +3,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define LOADER_IMAGE_LINE_SIZE (1024)
 
@@ -61,22 +62,24 @@ check_image_size(FILE *fptr, image_t *const image)
 }
 
 static int
-read_image_pixels(FILE *fptr, const image_t *const image)
+read_image_pixels(FILE *fptr, image_t *const image)
 {
     if ((fptr == NULL) || (image == NULL)) {
         return -1;
     }
 
+    if (image_allocate(image)) {
+        return -2;
+    }
 
     for (int i = 0; i < image->height; i++) {
         for (int j = 0; j < image->width; j++) {
             int val;
             if (fscanf(fptr, "%d", &val) != 1) {
-                return -2;
+                return -3;
             }
-            printf("%d ", val);
+            image->pixels[i * image->width + j] = (uint8_t)val;
         }
-        printf("\r\n");
     }
 
     return 0;
@@ -94,6 +97,15 @@ image_loader(const char *filename, image_t *const image)
     if (fptr == NULL) {
         return -2;
     }
+
+    size_t filename_len = strlen(filename) + 1;
+
+    image->filename = malloc(filename_len);
+    if (image->filename == NULL) {
+        return -3;
+    }
+
+    snprintf(image->filename, filename_len, "%s", filename);
 
     int result = check_image_format(fptr, image);
     if (result) {
