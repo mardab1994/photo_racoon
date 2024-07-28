@@ -9,7 +9,7 @@
 static char line[LOADER_IMAGE_LINE_SIZE];
 
 static int
-check_image_format(FILE *fptr, const image_t *image)
+check_image_format(FILE *fptr, image_t *const image)
 {
     if ((fptr == NULL) || (image == NULL)) {
         return -1;
@@ -19,9 +19,9 @@ check_image_format(FILE *fptr, const image_t *image)
         return -2;
     }
 
-    if ((line[0] == 'P') || (line[1] == '2')) {
-        printf("PGM format\r\n");
-    }
+    image->format = format_check(line);
+
+    printf("Format: %s\r\n", image->format.magic_number);
 
     char c;
 
@@ -61,11 +61,12 @@ check_image_size(FILE *fptr, image_t *const image)
 }
 
 static int
-read_image(FILE *fptr, const image_t *const image)
+read_image_pixels(FILE *fptr, const image_t *const image)
 {
     if ((fptr == NULL) || (image == NULL)) {
         return -1;
     }
+
 
     for (int i = 0; i < image->height; i++) {
         for (int j = 0; j < image->width; j++) {
@@ -104,7 +105,7 @@ image_loader(const char *filename, image_t *const image)
         return result;
     }
 
-    result = read_image(fptr, image);
+    result = read_image_pixels(fptr, image);
 
     fclose(fptr);
 
