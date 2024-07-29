@@ -52,7 +52,7 @@ save_image_pixels(const image_t *image, FILE *fptr)
 int
 image_saver(image_t *const image)
 {
-    if (image == NULL) {
+    if ((image == NULL) || (image->output_filename == NULL)) {
         return -1;
     }
 

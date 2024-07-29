@@ -4,6 +4,26 @@
 #include <stdlib.h>
 #include <string.h>
 
+static char *
+image_set_filename(const char *source_filename)
+{
+    if (source_filename == NULL) {
+        return NULL;
+    }
+
+    char *destination_filename = NULL;
+
+    size_t filename_len  = strlen(source_filename) + 1;
+    destination_filename = malloc(filename_len);
+    if (destination_filename == NULL) {
+        return NULL;
+    }
+
+    snprintf(destination_filename, filename_len, "%s", source_filename);
+
+    return destination_filename;
+}
+
 int
 image_allocate(image_t *const image)
 {
@@ -71,36 +91,26 @@ image_show(image_t *const image)
     return 0;
 }
 
-static char *
-image_set_filename(const char *source_filename)
-{
-    if (source_filename == NULL) {
-        return NULL;
-    }
-
-    char *destination_filename = NULL;
-
-    size_t filename_len  = strlen(source_filename) + 1;
-    destination_filename = malloc(filename_len);
-    if (destination_filename == NULL) {
-        return NULL;
-    }
-
-    snprintf(destination_filename, filename_len, "%s", source_filename);
-
-    return destination_filename;
-}
-
 int
 image_set_input_filename(image_t *image, const char *filename)
 {
+    if ((image == NULL) || (filename == NULL)) {
+        return -1;
+    }
+
     image->input_filename = image_set_filename(filename);
-    return image->input_filename != NULL ? 0 : -1;
+
+    return image->input_filename != NULL ? 0 : -2;
 }
 
 int
 image_set_output_filename(image_t *image, const char *filename)
 {
+    if ((image == NULL) || (filename == NULL)) {
+        return -1;
+    }
+
     image->output_filename = image_set_filename(filename);
-    return image->output_filename != NULL ? 0 : -1;
+
+    return image->output_filename != NULL ? 0 : -2;
 }
