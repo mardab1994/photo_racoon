@@ -24,6 +24,25 @@ image_set_filename(const char *source_filename)
     return destination_filename;
 }
 
+static int
+image_show(const char *filename)
+{
+    size_t len     = strlen("display ") + strlen(filename) + strlen(" &") + 1;
+    char  *command = malloc(len);
+
+    if (command == NULL) {
+        return -3;
+    }
+
+    snprintf(command, len, "%s %s &", "display", filename);
+
+    system(command);
+
+    free(command);
+
+    return 0;
+}
+
 int
 image_allocate(image_t *const image)
 {
@@ -65,7 +84,7 @@ image_free(image_t *const image)
 }
 
 int
-image_show(image_t *const image)
+image_show_input(image_t *const image)
 {
     if (image == NULL) {
         return -1;
@@ -75,20 +94,21 @@ image_show(image_t *const image)
         return -2;
     }
 
-    size_t len     = strlen("display ") + strlen(image->input_filename) + strlen(" &") + 1;
-    char  *command = malloc(len);
+    return image_show(image->input_filename);
+}
 
-    if (command == NULL) {
-        return -3;
+int
+image_show_output(image_t *const image)
+{
+    if (image == NULL) {
+        return -1;
     }
 
-    snprintf(command, len, "%s %s &", "display", image->input_filename);
+    if (image->input_filename == NULL) {
+        return -2;
+    }
 
-    system(command);
-
-    free(command);
-
-    return 0;
+    return image_show(image->output_filename);
 }
 
 int

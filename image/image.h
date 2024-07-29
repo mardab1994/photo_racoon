@@ -18,7 +18,8 @@ typedef struct {
 
 int image_allocate(image_t *const image);
 int image_free(image_t *const image);
-int image_show(image_t *const image);
+int image_show_input(image_t *const image);
+int image_show_output(image_t *const image);
 int image_set_input_filename(image_t *image, const char *filename);
 int image_set_output_filename(image_t *image, const char *filename);
 
