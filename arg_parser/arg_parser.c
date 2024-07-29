@@ -23,13 +23,12 @@ arg_parser_help(void)
 }
 
 int
-arg_parser(const int argc, const char *argv[])
+arg_parser(const int argc, const char *argv[], image_t *image)
 {
-    if (argv == NULL) {
+    if ((argv == NULL) || (image == NULL)) {
         arg_parser_help();
         return -1;
     }
-
 
     bool has_filter = false;
     bool has_in     = false;
@@ -42,12 +41,12 @@ arg_parser(const int argc, const char *argv[])
 
     for (int i = 1; i < argc; i++) {
         if (!has_in && (strcmp(argv[i], "--in") == 0) && (i + 1 <= argc)) {
-            has_in = true;
+            has_in = image_set_input_filename(image, argv[i + 1]) == 0;
             continue;
         }
 
         if (!has_out && (strcmp(argv[i], "--out") == 0) && (i + 1 <= argc)) {
-            has_out = true;
+            has_out = image_set_output_filename(image, argv[i + 1]) == 0;
             continue;
         }
 
@@ -84,6 +83,10 @@ arg_parser(const int argc, const char *argv[])
     }
 
     if (!has_in || !has_out || !has_filter) {
+        printf("Error: %s%s%s\r\n\r\n",
+               has_in ? "" : "\r\n\tno input file",
+               has_out ? "" : "\r\n\tno output file ",
+               has_filter ? "" : "\r\n\tno filter params");
         arg_parser_help();
         return -2;
     }

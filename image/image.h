@@ -5,7 +5,8 @@
 #include "formats.h"
 
 typedef struct {
-    char           *filename;
+    char           *input_filename;
+    char           *output_filename;
     char           *magic_number_str;
     char           *file_extension;
     uint32_t        width;
@@ -15,7 +16,9 @@ typedef struct {
     uint8_t        *pixels;
 } image_t;
 
-int image_allocate(image_t * const image);
-int image_free(image_t * const image);
-int image_show(image_t * const image);
-int image_set_filename(image_t *const image, const char *filename);
+int image_allocate(image_t *const image);
+int image_free(image_t *const image);
+int image_show(image_t *const image);
+int image_set_input_filename(image_t *image, const char *filename);
+int image_set_output_filename(image_t *image, const char *filename);
+

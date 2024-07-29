@@ -31,9 +31,14 @@ image_free(image_t *const image)
         image->pixels = NULL;
     }
 
-    if (image->filename != NULL) {
-        free(image->filename);
-        image->filename = NULL;
+    if (image->input_filename != NULL) {
+        free(image->input_filename);
+        image->input_filename = NULL;
+    }
+
+    if (image->output_filename != NULL) {
+        free(image->output_filename);
+        image->output_filename = NULL;
     }
 
     return 0;
@@ -46,18 +51,18 @@ image_show(image_t *const image)
         return -1;
     }
 
-    if (image->filename == NULL) {
+    if (image->input_filename == NULL) {
         return -2;
     }
 
-    size_t len     = strlen("display ") + strlen(image->filename) + strlen(" &") + 1;
+    size_t len     = strlen("display ") + strlen(image->input_filename) + strlen(" &") + 1;
     char  *command = malloc(len);
 
     if (command == NULL) {
         return -3;
     }
 
-    snprintf(command, len, "%s %s &", "display", image->filename);
+    snprintf(command, len, "%s %s &", "display", image->input_filename);
 
     system(command);
 
@@ -66,24 +71,36 @@ image_show(image_t *const image)
     return 0;
 }
 
-int
-image_set_filename(image_t *const image, const char *filename)
+static char *
+image_set_filename(const char *source_filename)
 {
-    if ((image == NULL) || (filename == NULL)) {
-        return -1;
+    if (source_filename == NULL) {
+        return NULL;
     }
 
-    if (image->filename == NULL) {
-        return -2;
+    char *destination_filename = NULL;
+
+    size_t filename_len  = strlen(source_filename) + 1;
+    destination_filename = malloc(filename_len);
+    if (destination_filename == NULL) {
+        return NULL;
     }
 
-    size_t filename_len = strlen(filename) + 1;
-    image->filename     = malloc(filename_len);
-    if (image->filename == NULL) {
-        return -3;
-    }
+    snprintf(destination_filename, filename_len, "%s", source_filename);
 
-    snprintf(image->filename, filename_len, "%s", filename);
+    return destination_filename;
+}
 
-    return 0;
+int
+image_set_input_filename(image_t *image, const char *filename)
+{
+    image->input_filename = image_set_filename(filename);
+    return image->input_filename != NULL ? 0 : -1;
+}
+
+int
+image_set_output_filename(image_t *image, const char *filename)
+{
+    image->output_filename = image_set_filename(filename);
+    return image->output_filename != NULL ? 0 : -1;
 }

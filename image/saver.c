@@ -56,16 +56,7 @@ image_saver(image_t *const image)
         return -1;
     }
 
-    size_t filename_len = strlen("ed_") + strlen(image->filename) + 1;
-
-    char *filename = malloc(filename_len);
-    if (filename == NULL) {
-        return -2;
-    }
-
-    snprintf(filename, filename_len, "ed_%s", image->filename);
-
-    FILE *fptr = fopen(filename, "w");
+    FILE *fptr = fopen(image->output_filename, "w");
 
     if (fptr == NULL) {
         return -2;

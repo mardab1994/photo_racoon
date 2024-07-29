@@ -2,4 +2,4 @@
 
 #include "image.h"
 
-int image_loader(const char *filename, image_t * const image);
+int image_loader(image_t * const image);

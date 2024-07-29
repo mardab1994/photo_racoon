@@ -86,25 +86,19 @@ read_image_pixels(FILE *fptr, image_t *const image)
 }
 
 int
-image_loader(const char *filename, image_t *const image)
+image_loader(image_t *const image)
 {
-    if ((filename == NULL) || (image == NULL)) {
+    if ((image == NULL) || (image->input_filename == NULL)) {
         return -1;
     }
 
-    FILE *fptr = fopen(filename, "r");
+    FILE *fptr = fopen(image->input_filename, "r");
 
     if (fptr == NULL) {
         return -2;
     }
 
-
-    int result = image_set_filename(image, filename);
-    if (result) {
-        return result;
-    }
-
-    result = check_image_format(fptr, image);
+    int result = check_image_format(fptr, image);
     if (result) {
         return result;
     }
