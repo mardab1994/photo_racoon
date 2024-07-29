@@ -23,21 +23,18 @@ arg_parser_help(void)
 }
 
 int
-arg_parser(const int argc, const char *argv[], image_t *image)
+arg_parser(const int argc, const char *argv[], image_t *image, filter_t *filter)
 {
-    if ((argv == NULL) || (image == NULL)) {
+    if ((argv == NULL) || (image == NULL) || (filter == NULL)) {
         arg_parser_help();
         return -1;
     }
 
+    memset(filter, 0, sizeof(filter_t));
+
     bool has_filter = false;
     bool has_in     = false;
     bool has_out    = false;
-
-    int    threshold = -1;
-    int    black     = -1;
-    int    white     = -1;
-    double gamma;
 
     for (int i = 1; i < argc; i++) {
         if (!has_in && (strcmp(argv[i], "--in") == 0) && (i + 1 <= argc)) {
@@ -51,33 +48,42 @@ arg_parser(const int argc, const char *argv[], image_t *image)
         }
 
         if (!has_filter && (strcmp(argv[i], "--negative") == 0)) {
-            has_filter = true;
+            filter->has_negative = true;
+            has_filter           = true;
             continue;
         }
 
-        if (!has_filter && (strcmp(argv[i], "--threshold") == 0) && (i + 1 <= argc) && (sscanf(argv[i + 1], "%d", &threshold) == 1)) {
-            has_filter = true;
+        if (!has_filter && (strcmp(argv[i], "--threshold") == 0) && (i + 1 <= argc) &&
+            (sscanf(argv[i + 1], "%d", &filter->threshold) == 1)) {
+            filter->has_threshold = true;
+            has_filter            = true;
             continue;
         }
 
-        if (!has_filter && (strcmp(argv[i], "--black-threshold") == 0) && (i + 1 <= argc) && (sscanf(argv[i + 1], "%d", &black) == 1)) {
-            has_filter = true;
+        if (!has_filter && (strcmp(argv[i], "--black-threshold") == 0) && (i + 1 <= argc) &&
+            (sscanf(argv[i + 1], "%d", &filter->black) == 1)) {
+            filter->has_black_threashold = true;
+            has_filter                   = true;
             continue;
         }
 
-        if (!has_filter && (strcmp(argv[i], "--white-threshold") == 0) && (i + 1 <= argc) && (sscanf(argv[i + 1], "%d", &white) == 1)) {
-            has_filter = true;
+        if (!has_filter && (strcmp(argv[i], "--white-threshold") == 0) && (i + 1 <= argc) &&
+            (sscanf(argv[i + 1], "%d", &filter->white) == 1)) {
+            filter->has_white_threashold = true;
+            has_filter                   = true;
             continue;
         }
 
-        if (!has_filter && (strcmp(argv[i], "--gamma") == 0) && (i + 1 <= argc) && (sscanf(argv[i + 1], "%lf", &gamma) == 1)) {
-            has_filter = true;
+        if (!has_filter && (strcmp(argv[i], "--gamma") == 0) && (i + 1 <= argc) && (sscanf(argv[i + 1], "%lf", &filter->gamma) == 1)) {
+            filter->has_gamma = true;
+            has_filter        = true;
             continue;
         }
 
-        if (!has_filter && (strcmp(argv[i], "--level") == 0) && (i + 2 <= argc) && (sscanf(argv[i + 1], "%d", &black) == 1) &&
-            (sscanf(argv[i + 2], "%d", &white) == 1)) {
-            has_filter = true;
+        if (!has_filter && (strcmp(argv[i], "--level") == 0) && (i + 2 <= argc) && (sscanf(argv[i + 1], "%d", &filter->black) == 1) &&
+            (sscanf(argv[i + 2], "%d", &filter->white) == 1)) {
+            filter->has_level = true;
+            has_filter        = true;
             continue;
         }
     }
