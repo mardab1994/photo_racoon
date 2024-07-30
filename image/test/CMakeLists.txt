@@ -1,0 +1,3 @@
+add_executable(test_image_set_filenames test_image_set_filenames.c)
+target_link_libraries(test_image_set_filenames image)
+

@@ -19,3 +19,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME} filters)
 
 add_subdirectory(arg_parser)
 target_link_libraries(${CMAKE_PROJECT_NAME} arg_parser)
+
+# testing 
+enable_testing()
