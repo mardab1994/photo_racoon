@@ -10,7 +10,7 @@
 int
 main(int argc, const char *argv[])
 {
-    image_t image = {0};
+    image_t  image = {0};
     filter_t filter;
 
     if (arg_parser(argc, argv, &image, &filter)) {
@@ -22,19 +22,21 @@ main(int argc, const char *argv[])
     image_show_input(&image);
 
     if (filter.has_negative) {
-        filters_negative(&image);
-    } else if (filter.has_negative) {
-        filters_thresholding(&image, filter.threshold);
-    } else if (filter.has_negative) {
-        filters_half_thresholding_black(&image, filter.black);
-    } else if (filter.has_negative) {
-        filters_half_thresholding_white(&image, filter.white);
-    } else if (filter.has_negative) {
-        filters_gamma(&image, filter.gamma);
-    } else if (filter.has_negative) {
-        filters_levels(&image, filter.black, filter.white);
+        result = filters_negative(&image);
+    } else if (filter.has_threshold) {
+        result = filters_thresholding(&image, filter.threshold);
+    } else if (filter.has_black_threashold) {
+        result = filters_half_thresholding_black(&image, filter.black);
+    } else if (filter.has_white_threashold) {
+        result = filters_half_thresholding_white(&image, filter.white);
+    } else if (filter.has_gamma) {
+        result = filters_gamma(&image, filter.gamma);
+    } else if (filter.has_level) {
+        result = filters_levels(&image, filter.black, filter.white);
     } else {
         printf("No filter\r\n");
+        image_free(&image);
+        return -2;
     }
 
     image_saver(&image);
