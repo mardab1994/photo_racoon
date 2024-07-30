@@ -1,4 +1,7 @@
-# version 0.0.3
+# version 0.1.0
+
+## 0.1.0 (30-07-2024) mdabioch 
+- Parsing arguments to get input and output filename and filters
 
 ## 0.0.3 (28-07-2024) mdabioch 
 - Point operations:
