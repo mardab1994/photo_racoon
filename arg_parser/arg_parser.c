@@ -13,13 +13,13 @@ arg_parser_help(void)
     printf("\t --in <filename> setup source file\r\n");
     printf("\t --out <filename> setup output filename\r\n");
     printf("\t --negative\r\n");
-    printf("\t --threshold val \r\n");
+    printf("\t --threshold val\r\n");
 
-    printf("\t --black-threshold val  \r\n");
-    printf("\t --white-threshold val  \r\n");
+    printf("\t --black-threshold val\r\n");
+    printf("\t --white-threshold val\r\n");
 
-    printf("\t --gamma val  \r\n");
-    printf("\t --level black_level white_level  \r\n");
+    printf("\t --gamma val\r\n");
+    printf("\t --level black_level white_level\r\n");
 }
 
 int
