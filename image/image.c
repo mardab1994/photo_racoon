@@ -104,7 +104,7 @@ image_show_output(image_t *const image)
         return -1;
     }
 
-    if (image->input_filename == NULL) {
+    if (image->output_filename == NULL) {
         return -2;
     }
 
