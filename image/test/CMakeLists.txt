@@ -1,3 +1,5 @@
 add_executable(test_image_set_filenames test_image_set_filenames.c)
 target_link_libraries(test_image_set_filenames image)
 
+add_executable(test_loader_image test_loader_image.c)
+target_link_libraries(test_loader_image image)
