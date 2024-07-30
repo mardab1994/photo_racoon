@@ -52,20 +52,11 @@ save_image_pixels(const image_t *image, FILE *fptr)
 int
 image_saver(image_t *const image)
 {
-    if (image == NULL) {
+    if ((image == NULL) || (image->output_filename == NULL)) {
         return -1;
     }
 
-    size_t filename_len = strlen("ed_") + strlen(image->filename) + 1;
-
-    char *filename = malloc(filename_len);
-    if (filename == NULL) {
-        return -2;
-    }
-
-    snprintf(filename, filename_len, "ed_%s", image->filename);
-
-    FILE *fptr = fopen(filename, "w");
+    FILE *fptr = fopen(image->output_filename, "w");
 
     if (fptr == NULL) {
         return -2;
